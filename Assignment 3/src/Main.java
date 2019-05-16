@@ -42,6 +42,8 @@ public class Main {
         double var2 = Main.getVar(mean2, qHist2);
         double covar = Main.getCovar(mean1, mean2, qHist1, qHist2);
 
+        System.out.println(covar);
+
         double avgMean = (mean1 + mean2)/2;
         double avgVar = (var1 + var2 + 2*covar)/4;
         double avgStdDev = Math.sqrt(avgVar);
