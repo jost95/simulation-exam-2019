@@ -1,4 +1,4 @@
-function [X,iter] = sa(Cp, Cf, Cs, D, G)
+function [X,Y,Z,cost,iter] = sa(Cp, Cf, Cs, D, G)    
     L = length(Cp);
    
     if L > 12
@@ -36,33 +36,32 @@ function [X,iter] = sa(Cp, Cf, Cs, D, G)
         D = D';
     end
     
-    % Initial (potentially infeasible solution)
+    % Initial dummy solution
     X = ones(L,1)*round(G/2);
-    Y = ones(L,1)*0.5;
-    Z = ones(L,1)*round(G/2);
-    Z(1) = 0; % Cannot store anything first period
+    Y = ones(L,1);
+    Z = zeros(L,1);
     
-    % Initial search ranges
+    % Initial search range, a bit outside the feasible boundries
     xRange = G;
-    yRange = 1;
     
     % Initial feasible solution
-    [X,Y,Z] = newSolution(X,Y,Z,xRange,yRange,D,G);
-    cost = Cp*X + Cf*toBinary(Y) + Cs*Z;
+    [X,Y,Z] = newSolution(X,Y,Z,xRange,D,G);
+    cost = Cp*X + Cf*Y + Cs*Z;
     
     % SA parameters
     iter = 1;
     completeTempIter = 0;
-    iterThresh = 1000;
-    temp = 200;
-    coolingRate = 0.9;
-    iterPerTemp = 10;
+    sameCostThresh = 1500;
+    sameCostIter = 0;
+    temp = 4000;
+    coolingRate = 0.98;
+    iterPerTemp = 20;
     
-    while iter < iterThresh
-        [newX,newY,newZ] = newSolution(X,Y,Z,xRange,yRange,D,G)
-        newCost = Cp*newX + Cf*toBinary(newY) + Cs*newZ;
-        diff = abs(cost-newCost);
+    while sameCostIter < sameCostThresh    
+        [newX,newY,newZ] = newSolution(X,Y,Z,xRange,D,G);
         
+        newCost = Cp*newX + Cf*newY + Cs*newZ;
+        diff = abs(cost-newCost);
         if newCost < cost
             cost = newCost;
             X = newX;
@@ -74,7 +73,8 @@ function [X,iter] = sa(Cp, Cf, Cs, D, G)
                 temp = coolingRate*temp;
             end
             
-            [xRange, yRange] = reduceSearchSpace(xRange, yRange, iter, temp, diff);
+            % Reduce search space
+            xRange = xRange * exp(-diff/(iter*temp));
             completeTempIter = completeTempIter + 1;
         elseif rand < exp(-diff/(temp))
             cost = newCost;
@@ -83,72 +83,79 @@ function [X,iter] = sa(Cp, Cf, Cs, D, G)
             Z = newZ;
         end
         
+        % Check if optimal solution has changed
+        if newCost == cost
+            sameCostIter = 0;
+        else
+            sameCostIter = sameCostIter + 1;
+        end
+        
         iter = iter + 1;
     end
 end
 
-function [X,Y,Z] = newSolution(X, Y, Z, xRange, yRange, D, G)
+function [X,Y,Z] = newSolution(X, Y, Z, xRange, D, G)
     L = length(X);
+    feasible = false;
     
-    % Generate new production decisions
-    for i = 1:L
-        Y(i) = randStep(Y(i), yRange, 1);
-    end
-    
-    % Generate new number of goods to produce
-    for i = 1:L
-        % Fullfill demand constraint
-        maxProd = G;
-        
-        if i > 1
-            maxProd = min(maxProd,D(i)-Z(i));
+    while ~feasible
+        feasible = true;
+        Y = ones(L,1);
+
+        % Generate new number of goods to produce
+        for i = 1:L
+            % Check how much we NEED to produce
+            storageSurplus = -D(i);
+            
+            % Try to empty storage
+            if i > 1
+                storageSurplus = storageSurplus + Z(i-1);
+            end
+
+            % If we have a surplus, we have a possibility to not produce
+            if storageSurplus >= 0
+                maxProd = G;
+                X(i) = randX(X(i), xRange, 0, maxProd);
+                
+                if X(i) == 0
+                    Y(i) = 0;
+                end
+            else
+                % No surplus, try to fullfill demand constraint
+                maxProd = G;
+                minProd = -storageSurplus;
+                
+                % Check max production constraint
+                if maxProd < minProd
+                    feasible = false;
+                    break
+                end
+
+                X(i) = randX(X(i), xRange, minProd, maxProd);
+            end
+            
+            % Add any surplus to storage
+            Z(i) = storageSurplus + X(i);
         end
-        
-        X(i) = round(randStep(X(i), xRange, maxProd));
-    end
-    
-    % Fullfill produce constraint
-    X = toBinary(Y).*X;
-    
-    for i = 2:L
-        Z(i) = X(i) + Z(i-1) - D(i);
     end
 end
 
-function binY = toBinary(Y)
-    L = length(Y);
-    binY = ones(L,1);
+function X = randX(X, range, min, max)
+    sign = 1;
     
-    for i = 1:L
-        if Y(i) < 0.5
-            binY(i) = 0;
-        end
-    end
-end
-
-function step = randStep(val, range, max)
-    tryStep = val + randSign()*randi(round(range));
-    
-    if tryStep > max
-        tryStep = max;
-    end
-        
-    if tryStep < 0
-        tryStep = 0;
-    end
-    
-    step = tryStep;
-end
-
-function sign = randSign()
     if rand < 0.5
         sign = -1;
-    else
-        sign = 1;
     end
-end
 
-function [xRange, yRange] = reduceSearchSpace(oldXRange, oldYRange, iter, temp, diff)
-    xRange = oldXRange * exp(-diff/(iter*temp));
-    yRange = oldYRange * exp(-diff/(iter*temp));
+    tryX = X + sign*rand*range;
+    
+    if tryX > max
+        tryX = max;
+    end
+        
+    if tryX < min
+        tryX = min;
+    end
+    
+    X = round(tryX);
 end
