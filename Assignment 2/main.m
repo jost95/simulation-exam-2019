@@ -27,20 +27,3 @@ x;
 % Print the results
 x;
 -fval;
-
-%% Problem AA (init above first)
-ub = [1 1000]; % no upper bound on x2
-[x, fval, ~, ~] = linprog(f, A, b, Aeq, Beq, lb, ub)
-
-%% Problem AB (init above first)
-lb = [2 0];
-[x, fval, ~, ~] = linprog(f, A, b, Aeq, Beq, lb, ub)
-
-%% Problem ABA
-lb = [2 0];
-ub = [1000 2]; % no upper bound on x1
-[x, fval, ~, ~] = linprog(f, A, b, Aeq, Beq, lb, ub)
-
-%% Problem ABB
-lb = [2 3];
-[x, fval, ~, ~] = linprog(f, A, b, Aeq, Beq, lb, ub)
