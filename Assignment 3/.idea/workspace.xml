@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="11fe83a2-2e91-4f7e-8049-844afd4c3798" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Assignment 1/main.m" beforeDir="false" afterPath="$PROJECT_DIR$/../Assignment 1/main.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assignment 2/branch_bound.m" beforeDir="false" afterPath="$PROJECT_DIR$/../Assignment 2/branch_bound.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Simulation.java" afterDir="false" />
-    </list>
+    <list default="true" id="11fe83a2-2e91-4f7e-8049-844afd4c3798" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +14,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="327">
+              <caret line="42" column="36" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -147,12 +141,12 @@
       <workItem from="1557943108701" duration="12215000" />
       <workItem from="1558615271120" duration="892000" />
       <workItem from="1558617110867" duration="30000" />
-      <workItem from="1558617208265" duration="3667000" />
+      <workItem from="1558617208265" duration="3714000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16804000" />
+    <option name="totallyTimeSpent" value="16851000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -167,7 +161,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28082192" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28082192" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -175,7 +169,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32876712" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32876712" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.23287672" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -223,8 +217,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+        <state relative-caret-position="327">
+          <caret line="42" column="36" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
         </state>
       </provider>
     </entry>
