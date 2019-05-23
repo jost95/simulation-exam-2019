@@ -6,7 +6,7 @@ class Simulation {
     private static final int ARRIVAL = 1;
     private static final int DEPARTURE = 2;
     private static final int MEASURE = 3;
-    private static final int SIM_LENGTH = 10000;
+    private static final int SIM_LENGTH = 1000000;
 
     private double time;
     private EventList eventList;
@@ -14,8 +14,9 @@ class Simulation {
     private Random rand;
 
     private int queue;
+    private int inSystem;
     private boolean antithetic;
-    private List<Integer> queueHistory;
+    private List<Integer> systemHistory;
 
     Simulation() {
         reset();
@@ -28,9 +29,11 @@ class Simulation {
         servers[0] = new Server(0);
         servers[1] = new Server(1);
         rand = new Random();
+        inSystem = 0;
         queue = 0;
-        queueHistory = new ArrayList<>();
+        systemHistory = new ArrayList<>();
         antithetic = false;
+
     }
 
     void seedOn() {
@@ -41,39 +44,54 @@ class Simulation {
         antithetic = true;
     }
 
-    private void handle_event(Event event) {
+    private void handleEvent(Event event) {
         switch (event.getType()) {
             case ARRIVAL:
-                handle_arrival();
+                handleArrival();
                 break;
             case DEPARTURE:
-                handle_departure(event.getServer());
+                handleDeparture(event.getServer());
                 break;
             case MEASURE:
-                handle_measurement();
+                handleMeasurement();
                 break;
         }
     }
 
-    private void handle_arrival() {
+    private void handleArrival() {
+        inSystem++;
+        boolean serverFound = false;
+
+        // Check if can be served right away
         for (Server server : servers) {
             if (server.available) {
-                queue++;
+                serverFound = true;
                 server.available = false;
                 eventList.put(new Event(DEPARTURE, getNextDeparture(), server.index));
+                break;
             }
+        }
+
+        if (!serverFound) {
+            queue++;
         }
 
         eventList.put(new Event(ARRIVAL, getNextArrival()));
     }
 
-    private void handle_departure(int index) {
-        queue--;
-        servers[index].available = true;
+    private void handleDeparture(int index) {
+        inSystem--;
+
+        if (queue == 0) {
+            servers[index].available = true;
+        } else {
+            queue--;
+            eventList.put(new Event(DEPARTURE, getNextDeparture(), index));
+        }
     }
 
-    private void handle_measurement() {
-        queueHistory.add(queue);
+    private void handleMeasurement() {
+        systemHistory.add(inSystem);
         eventList.put(new Event(MEASURE, getNextMeasurement()));
     }
 
@@ -87,19 +105,19 @@ class Simulation {
     }
 
     private double getNextMeasurement() {
-        return time + 5;
+        return time + 10;
     }
 
     private double getRand() {
         return antithetic ? 1 - rand.nextDouble() : rand.nextDouble();
     }
 
-    List<Integer> getQueueHistory() {
-        return queueHistory;
+    List<Integer> getSystemHistory() {
+        return systemHistory;
     }
 
     void run() {
-        System.out.println("Starting simulation");
+        System.out.print("Starting... ");
 
         eventList.put(new Event(ARRIVAL, getNextArrival()));
         eventList.put(new Event(MEASURE, time + 100));
@@ -107,10 +125,10 @@ class Simulation {
         while (time < SIM_LENGTH) {
             Event event = eventList.pop();
             time = event.getTime();
-            handle_event(event);
+            handleEvent(event);
         }
 
-        System.out.println("Simulation finished");
+        System.out.println("finished");
     }
 
     private class Server {

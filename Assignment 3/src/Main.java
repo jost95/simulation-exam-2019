@@ -60,11 +60,11 @@ public class Main {
         System.out.println("Regular simulation");
         sim.seedOn();
         sim.run();
-        qHist1 = sim.getQueueHistory();
+        qHist1 = sim.getSystemHistory();
         sim.reset();
         sim.seedOn();
         sim.run();
-        qHist2 = sim.getQueueHistory();
+        qHist2 = sim.getSystemHistory();
 
         System.out.println("Regular simulation results: " + Main.calcConfInt(qHist1, qHist2));
 
@@ -72,12 +72,12 @@ public class Main {
         sim.reset();
         sim.seedOn();
         sim.run();
-        qHist1 = sim.getQueueHistory();
+        qHist1 = sim.getSystemHistory();
         sim.reset();
         sim.seedOn();
         sim.antheticOn();
         sim.run();
-        qHist2 = sim.getQueueHistory();
+        qHist2 = sim.getSystemHistory();
 
         System.out.println("Antithetic simulation results: " + Main.calcConfInt(qHist1, qHist2));
     }

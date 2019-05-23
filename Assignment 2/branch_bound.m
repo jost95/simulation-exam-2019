@@ -12,7 +12,6 @@ ub = ones(1,2)*Inf;
 
 B = -Inf;
 xOpt = zeros(1,2);
-fOpt = 0;
 
 upperBounds = {ub};
 lowerBounds = {lb};
@@ -35,7 +34,6 @@ while ~isempty(upperBounds)
             if floor(x) == x
                 B = fval;
                 xOpt = x;
-                fOpt = fval;
             else
                 % Find x to branch on
                 i = 1;
@@ -61,7 +59,7 @@ end
 
 % Print solution
 xOpt
-fOpt
+B
 
 
 

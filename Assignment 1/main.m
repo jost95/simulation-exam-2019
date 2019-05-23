@@ -57,7 +57,8 @@ xlabel('Change in max PIII demand')
 ylabel('Total profit')
 
 %% Variating in price for P1 (run init first)
-basePrice = f(1);
+%basePrice = f(1);
+basePrice = -6100;
 oldPrice = f(1);
 baseX = x;
 newX = x;
@@ -67,7 +68,8 @@ while isequal(baseX,newX)
     oldPrice = f(1);
     f(1) = basePrice + i;
     newX = linprog(f,A,b,Aeq,beq,lb,ub);
-    i = i + 100;
+    i = i + 1;
 end
 
-oldPrice
+% Print price
+f(1)
