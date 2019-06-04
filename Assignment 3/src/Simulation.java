@@ -11,7 +11,8 @@ class Simulation {
     private double time;
     private EventList eventList;
     private Server[] servers;
-    private Random rand;
+    private Random serviceRand;
+    private Random arrivalRand;
 
     private int queue;
     private int inSystem;
@@ -28,7 +29,8 @@ class Simulation {
         servers = new Server[2];
         servers[0] = new Server(0);
         servers[1] = new Server(1);
-        rand = new Random();
+        arrivalRand = new Random();
+        serviceRand = new Random();
         inSystem = 0;
         queue = 0;
         systemHistory = new ArrayList<>();
@@ -37,7 +39,7 @@ class Simulation {
     }
 
     void seedOn() {
-        rand = new Random(0);
+        serviceRand = new Random(0);
     }
 
     void antheticOn() {
@@ -97,19 +99,19 @@ class Simulation {
 
     private double getNextArrival() {
         double meanArrival = 1.2;
-        return time - Math.log(1 - getRand()) * meanArrival;
+        return time - Math.log(1 - arrivalRand.nextDouble()) * meanArrival;
     }
 
     private double getNextDeparture() {
-        return time + getRand() * 2;
+        return time + getServiceRand() * 2;
     }
 
     private double getNextMeasurement() {
         return time + 10;
     }
 
-    private double getRand() {
-        return antithetic ? 1 - rand.nextDouble() : rand.nextDouble();
+    private double getServiceRand() {
+        return antithetic ? 1 - serviceRand.nextDouble() : serviceRand.nextDouble();
     }
 
     List<Integer> getSystemHistory() {
