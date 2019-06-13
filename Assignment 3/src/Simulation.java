@@ -39,7 +39,8 @@ class Simulation {
     }
 
     void seedOn() {
-        serviceRand = new Random(0);
+        arrivalRand = new Random(0);
+        serviceRand = new Random(1);
     }
 
     void antheticOn() {

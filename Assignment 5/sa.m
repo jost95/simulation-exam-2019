@@ -42,7 +42,7 @@ function [X,Y,Z,cost,iter] = sa(Cp, Cf, Cs, D, G)
     Z = zeros(L,1);
     
     % Initial search range, a bit outside the feasible boundries
-    xRange = G;
+    xRange = G/2;
     
     % Initial feasible solution
     [X,Y,Z] = newSolution(X,Y,Z,xRange,D,G);
@@ -51,9 +51,9 @@ function [X,Y,Z,cost,iter] = sa(Cp, Cf, Cs, D, G)
     % SA parameters
     iter = 1;
     completeTempIter = 0;
-    sameCostThresh = 1500;
+    sameCostThresh = 50;
     sameCostIter = 0;
-    temp = 4000;
+    temp = 500;
     coolingRate = 0.98;
     iterPerTemp = 20;
     
